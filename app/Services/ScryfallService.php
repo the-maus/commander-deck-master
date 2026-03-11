@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ScryfallService
 {
@@ -18,11 +19,20 @@ class ScryfallService
 
     public function search($query)
     {
+        $parameters = ['q' => $query, 'include_multilingual' => true];
+
+        return $this->makeRequest($parameters);
+    }
+
+    private function makeRequest($parameters = [], $endpoint = '/cards/search')
+    {
         // avoid "HTTP 429 Too Many Requests"
         usleep(100 * 1000); // 100 milisseconds
 
-        $response = $this->client->get(self::BASE_URL . "/cards/search", ['q' => "\"$query\"", 'include_multilingual' => true]);
-
+        $response = $this->client->get(self::BASE_URL . $endpoint, $parameters);
+        if(!$response->successful())
+            Log::error("Unexpected Api Response Status Code: {$response->status()}", $response->json());
+    
         return $response->json()['data'] ?? [];
     }
 }

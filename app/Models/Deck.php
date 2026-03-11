@@ -9,7 +9,8 @@ class Deck extends Model
     protected $fillable = [
         'name',
         'commander_name',
-        'commander_colors'
+        'commander_colors',
+        'image_url'
     ];
 
     protected $casts = [
