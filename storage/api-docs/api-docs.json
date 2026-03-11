@@ -1,0 +1,49 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Commander Deck Builder API",
+        "description": "API for building and analyzing Commander decks for Magic: The Gathering",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Local API server"
+        }
+    ],
+    "paths": {
+        "/cards/search": {
+            "get": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Search Magic cards",
+                "description": "Search cards using the Scryfall API",
+                "operationId": "569f3a6f9ad00bc3bd45dbc7fe1cc3d5",
+                "parameters": [
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "description": "Search query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "sol ring"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Card results"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Cards",
+            "description": "Cards"
+        }
+    ]
+}
