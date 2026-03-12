@@ -17,8 +17,18 @@ class CardController extends Controller implements CardControllerDocs
     {
         $req->validate(['q' => 'required']);
 
-        $response = $this->scryfall->search($req->q);
+        $response = $this->scryfall->search(['query' => $req->q]);
 
         return ApiResponse::success($response);
+    }
+
+    public function getCardPrints(Request $req)
+    {
+        $req->validate(['oracle_id' => 'required']);
+
+        $cards = $this->scryfall->search(['oracle_id' => $req->oracle_id, 'unique' => 'prints']);
+        $prints = array_column($cards, 'image_uris.normal');
+
+        return ApiResponse::success($prints);
     }
 }

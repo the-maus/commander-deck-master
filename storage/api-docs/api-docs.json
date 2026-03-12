@@ -44,7 +44,53 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "The title field is required."
+                                            "example": "The q is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cards/prints": {
+            "get": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Get card print variations",
+                "description": "Get cards print variations using the Scryfall API",
+                "operationId": "d90f9a814708cccaf86ba2adda3e9a54",
+                "parameters": [
+                    {
+                        "name": "oracle_id",
+                        "in": "query",
+                        "description": "Oracle ID for the card on Scryfall",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "b828ba28-e98d-498b-9ab4-d4aa7143e407"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Prints urls"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The oracle_id field is required."
                                         },
                                         "errors": {
                                             "type": "object"
@@ -188,7 +234,7 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "The deck unique ID",
                         "required": true,
                         "schema": {
@@ -272,7 +318,7 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "The deck unique ID",
                         "required": true,
                         "schema": {
@@ -401,7 +447,7 @@
                 "parameters": [
                     {
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "description": "The deck unique ID",
                         "required": true,
                         "schema": {

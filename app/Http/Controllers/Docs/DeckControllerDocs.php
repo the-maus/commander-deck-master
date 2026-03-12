@@ -84,7 +84,7 @@ interface DeckControllerDocs
         parameters:[
             new OA\Parameter(
                 name:"id",
-                in:"query",
+                in:"path",
                 required:true,
                 description:"The deck unique ID",
                 schema: new OA\Schema(type:"integer")
@@ -162,7 +162,7 @@ interface DeckControllerDocs
         parameters:[
             new OA\Parameter(
                 name:"id",
-                in:"query",
+                in:"path",
                 required:true,
                 description:"The deck unique ID",
                 schema: new OA\Schema(type:"integer")
@@ -206,7 +206,7 @@ interface DeckControllerDocs
         parameters:[
             new OA\Parameter(
                 name:"id",
-                in:"query",
+                in:"path",
                 required:true,
                 description:"The deck unique ID",
                 schema: new OA\Schema(type:"integer")

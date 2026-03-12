@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 // Cards
 Route::get('/cards/search', [CardController::class, 'search'])->name('cards_search');
+Route::get('/cards/prints', [CardController::class, 'getCardPrints'])->name('cards_prints');
 
 // Decks
 Route::post('/decks', [DeckController::class, 'create'])->name('decks_create');

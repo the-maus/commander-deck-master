@@ -17,9 +17,18 @@ class ScryfallService
         $this->client = Http::acceptJson()->withUserAgent($userAgent);
     }
 
-    public function search($query)
+    public function search($options = [])
     {
-        $parameters = ['q' => $query, 'include_multilingual' => true];
+        $parameters = ['include_multilingual' => true, 'lang' => $options['lang'] ?? 'en'];
+
+        if (isset($options['query']))
+            $parameters['q'] = $options['query'];
+
+        if (isset($options['oracle_id']))
+            $parameters['q'] = "oracleid:{$options['oracle_id']}";
+
+        if (isset($options['unique']))
+            $parameters['unique'] = $options['unique'];
 
         return $this->makeRequest($parameters);
     }
