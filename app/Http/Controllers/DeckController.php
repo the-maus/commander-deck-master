@@ -14,6 +14,28 @@ class DeckController extends Controller implements DeckControllerDocs
     
     public function create(Request $req)
     {
+        $this->validateDeckData($req);
+
+        $deck = Deck::create($req->all());
+
+        return ApiResponse::success($deck, 201);
+    }
+
+    public function update(Request $req, string $id)
+    {
+        $this->validateDeckData($req);
+
+        $deck = Deck::find($id);
+        if ($deck) {
+            $deck->update($req->all());
+            return ApiResponse::success($deck);
+        }else
+            return ApiResponse::error('Deck not found', 404);
+    }
+
+
+    private function validateDeckData(Request $req)
+    {
         $req->validate([
             'name'               => 'string|required|max:255',
             'commander_name'     => 'string|required|max:255',
@@ -21,9 +43,26 @@ class DeckController extends Controller implements DeckControllerDocs
             'commander_colors.*' => Rule::in(Card::COLORS),
             'image_url'          => 'string|required'
         ]);
+    }
 
-        $deck = Deck::create($req->all());
+    public function show(string $id)
+    {
+        $deck = Deck::find($id);
 
-        return ApiResponse::success($deck, 201);
+        if ($deck)
+            return ApiResponse::success($deck);
+        else
+            return ApiResponse::error('Deck not found', 404);
+    }
+
+    public function delete(string $id)
+    {
+        $deck = Deck::find($id);
+
+        if ($deck) {
+            $deck->delete();
+            return ApiResponse::success('Deck deleted successfully!');
+        }else
+            return ApiResponse::error('Deck not found', 404);
     }
 }

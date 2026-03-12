@@ -5,7 +5,7 @@ use OpenApi\Attributes as OA;
 
 /**
  * @OA\Info(
- *     title="Commander Deck Builder API",
+ *     title="Commander Deck Master API",
  *     version="1.0.0",
  *     description="API for building and analyzing Commander decks for Magic: The Gathering"
  * )

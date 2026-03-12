@@ -10,3 +10,6 @@ Route::get('/cards/search', [CardController::class, 'search'])->name('cards_sear
 
 // Decks
 Route::post('/decks', [DeckController::class, 'create'])->name('decks_create');
+Route::put('/decks/{id}', [DeckController::class, 'update'])->name('decks_update');
+Route::get('/decks/{id}', [DeckController::class, 'show'])->name('decks_show');
+Route::delete('/decks/{id}', [DeckController::class, 'delete'])->name('decks_delete');

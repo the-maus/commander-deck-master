@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Commander Deck Builder API",
+        "title": "Commander Deck Master API",
         "description": "API for building and analyzing Commander decks for Magic: The Gathering",
         "version": "1.0.0"
     },
@@ -17,7 +17,7 @@
                 "tags": [
                     "Cards"
                 ],
-                "summary": "Search Magic cards",
+                "summary": "Search cards",
                 "description": "Search cards using the Scryfall API",
                 "operationId": "32fa56a962cd66c2fc878e3b5b3c44e8",
                 "parameters": [
@@ -35,6 +35,25 @@
                 "responses": {
                     "200": {
                         "description": "Card results"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The title field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -93,7 +112,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Post created successfully",
+                        "description": "Deck created successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -102,17 +121,34 @@
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "title": {
+                                        "name": {
                                             "type": "string",
-                                            "example": "My new post title"
+                                            "example": "Atraxa superfriends"
                                         },
-                                        "content": {
+                                        "commander_name": {
                                             "type": "string",
-                                            "example": "The actual content of the post."
+                                            "example": "Atraxa, Praetors' Voice"
+                                        },
+                                        "commander_colors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "example": "[\"G\", \"W\", \"U\", \"B\"]"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
                                         },
                                         "created_at": {
                                             "type": "string",
-                                            "format": "date-time"
+                                            "format": "date-time",
+                                            "example": "2026-03-11T22:50:26.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-03-11T22:50:26.000000Z"
                                         }
                                     },
                                     "type": "object"
@@ -128,10 +164,267 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "The title field is required."
+                                            "example": "The name field is required."
                                         },
                                         "errors": {
                                             "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/decks/{id}": {
+            "get": {
+                "tags": [
+                    "Decks"
+                ],
+                "summary": "Get info for an existing deck",
+                "operationId": "aae5798182c4813ca1b19f881978c1ed",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The deck unique ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deck data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Atraxa superfriends"
+                                        },
+                                        "commander_name": {
+                                            "type": "string",
+                                            "example": "Atraxa, Praetors' Voice"
+                                        },
+                                        "commander_colors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "example": "[\"G\", \"W\", \"U\", \"B\"]"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-03-11T22:50:26.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-03-11T22:50:26.000000Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Deck not found"
+                                        },
+                                        "status_code": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Decks"
+                ],
+                "summary": "Update an existing deck",
+                "operationId": "26a1c9ec19b7e97561a15182578df192",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The deck unique ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "commander_name",
+                                    "commander_colors",
+                                    "image_url"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "The deck name",
+                                        "type": "string",
+                                        "example": "Atraxa superfriends"
+                                    },
+                                    "commander_name": {
+                                        "description": "The commander card name",
+                                        "type": "string",
+                                        "example": "Atraxa, Praetors' Voice"
+                                    },
+                                    "commander colors": {
+                                        "description": "Array containing the color codes",
+                                        "type": "string",
+                                        "enum": [
+                                            "W",
+                                            "U",
+                                            "B",
+                                            "R",
+                                            "G"
+                                        ],
+                                        "example": "[\"G\", \"W\", \"U\", \"B\"]"
+                                    },
+                                    "image_url": {
+                                        "description": "URL for the selected commander card print variation image",
+                                        "type": "string",
+                                        "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Deck updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Atraxa superfriends"
+                                        },
+                                        "commander_name": {
+                                            "type": "string",
+                                            "example": "Atraxa, Praetors' Voice"
+                                        },
+                                        "commander_colors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "example": "[\"G\", \"W\", \"U\", \"B\"]"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-03-11T22:50:26.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-03-11T22:50:26.000000Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Decks"
+                ],
+                "summary": "Delete an existing deck",
+                "operationId": "d96c32ff5b897a3b3d827dada0cfbc0c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The deck unique ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deck deleted successfully"
+                    },
+                    "404": {
+                        "description": "Not found error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Deck not found"
+                                        },
+                                        "status_code": {
+                                            "type": "integer"
                                         }
                                     },
                                     "type": "object"

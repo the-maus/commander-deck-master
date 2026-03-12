@@ -9,7 +9,7 @@ interface CardControllerDocs
 {
     #[OA\Get(
         path:"/cards/search",
-        summary:"Search Magic cards",
+        summary:"Search cards",
         description:"Search cards using the Scryfall API",
         tags:["Cards"],
         parameters:[
@@ -22,7 +22,17 @@ interface CardControllerDocs
             )
         ],
         responses:[
-            new OA\Response(response:200, description:"Card results")
+            new OA\Response(response:200, description:"Card results"),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The title field is required.'),
+                        new OA\Property(property: 'errors', type: 'object'),
+                    ]
+                )
+            )
         ]
     )]
     public function search(Request $req);
