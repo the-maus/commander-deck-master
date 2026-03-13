@@ -27,7 +27,7 @@ class CardController extends Controller implements CardControllerDocs
         $req->validate(['oracle_id' => 'required']);
 
         $cards = $this->scryfall->search(['oracle_id' => $req->oracle_id, 'unique' => 'prints']);
-        $prints = array_column($cards, 'image_uris.normal');
+        $prints = array_column(array_column($cards, 'image_uris'), 'normal');
 
         return ApiResponse::success($prints);
     }

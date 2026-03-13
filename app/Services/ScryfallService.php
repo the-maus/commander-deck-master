@@ -19,7 +19,8 @@ class ScryfallService
 
     public function search($options = [])
     {
-        $parameters = ['include_multilingual' => true, 'lang' => $options['lang'] ?? 'en'];
+        $parameters = [];
+        $lang =  $options['lang'] ?? 'pt';
 
         if (isset($options['query']))
             $parameters['q'] = $options['query'];
@@ -29,6 +30,8 @@ class ScryfallService
 
         if (isset($options['unique']))
             $parameters['unique'] = $options['unique'];
+
+        $parameters['q'] = ($parameters['q'] ?? '') . " lang:$lang";
 
         return $this->makeRequest($parameters);
     }
