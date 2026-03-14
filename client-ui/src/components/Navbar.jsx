@@ -11,9 +11,9 @@ const AppNavbar = () => {
     ];
 
     return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed="top">
-            <Container fluid>
-                <Navbar.Brand as={NavLink} to="/" className="navbar-brand align-self-start">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
+            <Container className="m-0">
+                <Navbar.Brand as={NavLink} to="/" className="navbar-brand">
                     <img
                         src={logo}
                         width={30}
@@ -21,7 +21,7 @@ const AppNavbar = () => {
                     />
                     Commander Deck Master
                 </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="navbar-nav">
                         {navItems.map((item) => (

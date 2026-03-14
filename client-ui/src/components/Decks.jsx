@@ -7,7 +7,7 @@ const Decks = () => {
     const [page, setPage] = useState(1);
     const [nextPage, setNextPage] = useState(true);
     const [prevPage, setPrevPage] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const loadDecks = async () => {
         setLoading(true);
@@ -37,7 +37,7 @@ const Decks = () => {
                     <Row>
                         {decks &&
                             decks.map((deck) => (
-                                <Col md={6} className="mb-4">
+                                <Col md={4} className="mb-4">
                                     <Card>
                                         <img
                                             src={deck.art_crop}
@@ -56,20 +56,6 @@ const Decks = () => {
                                 </Col>
                             ))}
                     </Row>
-                    {/* <Container fluid>
-                        <Row>
-                            <Col>
-                                {prevPage && (
-                                    <Button variant="primary" onClick={() => setPage(page - 1)}>Back</Button>
-                                )}
-                            </Col>
-                            <Col>
-                                {nextPage && (
-                                    <Button variant="primary" onClick={() => setPage(page + 1)}>Next</Button>
-                                )}
-                            </Col>
-                        </Row>
-                    </Container> */}
                     <Container>
                         <Row className="align-items-center">
                             <Col className="text-center">
@@ -86,7 +72,11 @@ const Decks = () => {
                     </Container>
                 </Container>
             )}
-            {loading && <h1>Carregando...</h1>}
+            {loading && (
+                <Container fluid>
+                    <h1>Loading...</h1>
+                </Container>
+            )}
         </>
     );
 };

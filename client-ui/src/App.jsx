@@ -8,14 +8,14 @@ import { useState } from "react";
 
 function App() {
     return (
-        <div className="App">
+        <>
             <BrowserRouter>
-                <Navbar />
+                <Navbar/>
 				<Routes>
 					<Route path="/decks" element={<Decks />} />
 				</Routes>
             </BrowserRouter>
-        </div>
+		</>
     );
 }
 
