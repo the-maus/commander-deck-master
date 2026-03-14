@@ -14,7 +14,7 @@ class DeckController extends Controller implements DeckControllerDocs
 
     public function index(Request $req) 
     {
-        $decks = Deck::paginate(10, ['id', 'name', 'art_crop']);
+        $decks = Deck::orderBy('name')->paginate(2, ['id', 'name', 'commander_name', 'art_crop']);
 
         return ApiResponse::success($decks);
     }
