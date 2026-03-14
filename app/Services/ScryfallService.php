@@ -20,7 +20,7 @@ class ScryfallService
     public function search($options = [])
     {
         $parameters = [];
-        $lang =  $options['lang'] ?? 'pt';
+        $lang =  $options['lang'] ?? 'en';
 
         if (isset($options['query']))
             $parameters['q'] = $options['query'];

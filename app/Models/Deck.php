@@ -10,7 +10,8 @@ class Deck extends Model
         'name',
         'commander_name',
         'commander_colors',
-        'image_url'
+        'image_url',
+        'art_crop'
     ];
 
     protected $casts = [

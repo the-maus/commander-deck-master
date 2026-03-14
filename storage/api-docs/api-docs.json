@@ -105,6 +105,50 @@
             }
         },
         "/api/decks": {
+            "get": {
+                "tags": [
+                    "Decks"
+                ],
+                "summary": "Lists decks",
+                "operationId": "41c4d838083d7fe11a8e52367801bc15",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The list page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A deck list with fewer properties (below) and the pagination data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Atraxa superfriends"
+                                        },
+                                        "art_crop": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Decks"
@@ -120,7 +164,8 @@
                                     "name",
                                     "commander_name",
                                     "commander_colors",
-                                    "image_url"
+                                    "image_url",
+                                    "art_crop"
                                 ],
                                 "properties": {
                                     "name": {
@@ -149,6 +194,11 @@
                                         "description": "URL for the selected commander card print variation image",
                                         "type": "string",
                                         "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                    },
+                                    "art_crop": {
+                                        "description": "URL for the selected commander card art",
+                                        "type": "string",
+                                        "example": "https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541"
                                     }
                                 },
                                 "type": "object"
@@ -185,6 +235,10 @@
                                         "image_url": {
                                             "type": "string",
                                             "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                        },
+                                        "art_crop": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541"
                                         },
                                         "created_at": {
                                             "type": "string",
@@ -272,6 +326,10 @@
                                             "type": "string",
                                             "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
                                         },
+                                        "art_crop": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541"
+                                        },
                                         "created_at": {
                                             "type": "string",
                                             "format": "date-time",
@@ -335,7 +393,8 @@
                                     "name",
                                     "commander_name",
                                     "commander_colors",
-                                    "image_url"
+                                    "image_url",
+                                    "art_crop"
                                 ],
                                 "properties": {
                                     "name": {
@@ -364,6 +423,11 @@
                                         "description": "URL for the selected commander card print variation image",
                                         "type": "string",
                                         "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                    },
+                                    "art_crop": {
+                                        "description": "URL for the selected commander card art",
+                                        "type": "string",
+                                        "example": "https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541"
                                     }
                                 },
                                 "type": "object"
@@ -400,6 +464,10 @@
                                         "image_url": {
                                             "type": "string",
                                             "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                        },
+                                        "art_crop": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541"
                                         },
                                         "created_at": {
                                             "type": "string",

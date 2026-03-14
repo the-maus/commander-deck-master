@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('commander_name');
             $table->string('commander_colors');
             $table->string('image_url');
+            $table->string('art_crop');
             $table->timestamps();
         });
     }

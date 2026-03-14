@@ -16,7 +16,7 @@ interface DeckControllerDocs
             required: true,
             content: new OA\JsonContent(
                 type: 'object',
-                required: ['name', 'commander_name', 'commander_colors', 'image_url'],
+                required: ['name', 'commander_name', 'commander_colors', 'image_url', 'art_crop'],
                 properties: [
                     new OA\Property(
                         property: 'name',
@@ -43,6 +43,12 @@ interface DeckControllerDocs
                         description: 'URL for the selected commander card print variation image',
                         example: 'https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796'
                     ),
+                    new OA\Property(
+                        property: 'art_crop',
+                        type: 'string',
+                        description: 'URL for the selected commander card art',
+                        example: 'https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541'
+                    ),
                 ],
             ),
         ),
@@ -57,6 +63,7 @@ interface DeckControllerDocs
                         new OA\Property(property: 'commander_name', type: 'string', example: 'Atraxa, Praetors\' Voice'),
                         new OA\Property(property: 'commander_colors', type: 'array', example: '["G", "W", "U", "B"]', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'image_url', type: 'string', example: 'https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796'),
+                        new OA\Property(property: 'art_crop', type: 'string', example: 'https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541'),
                         new OA\Property(property: 'created_at', type: 'string', example: '2026-03-11T22:50:26.000000Z', format: 'date-time'),
                         new OA\Property(property: 'updated_at', type: 'string', example: '2026-03-11T22:50:26.000000Z', format: 'date-time'),
                     ],
@@ -94,7 +101,7 @@ interface DeckControllerDocs
             required: true,
             content: new OA\JsonContent(
                 type: 'object',
-                required: ['name', 'commander_name', 'commander_colors', 'image_url'],
+                required: ['name', 'commander_name', 'commander_colors', 'image_url', 'art_crop'],
                 properties: [
                     new OA\Property(
                         property: 'name',
@@ -121,6 +128,12 @@ interface DeckControllerDocs
                         description: 'URL for the selected commander card print variation image',
                         example: 'https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796'
                     ),
+                    new OA\Property(
+                        property: 'art_crop',
+                        type: 'string',
+                        description: 'URL for the selected commander card art',
+                        example: 'https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541'
+                    ),
                 ],
             ),
         ),
@@ -135,6 +148,7 @@ interface DeckControllerDocs
                         new OA\Property(property: 'commander_name', type: 'string', example: 'Atraxa, Praetors\' Voice'),
                         new OA\Property(property: 'commander_colors', type: 'array', example: '["G", "W", "U", "B"]', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'image_url', type: 'string', example: 'https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796'),
+                        new OA\Property(property: 'art_crop', type: 'string', example: 'https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541'),
                         new OA\Property(property: 'created_at', type: 'string', example: '2026-03-11T22:50:26.000000Z', format: 'date-time'),
                         new OA\Property(property: 'updated_at', type: 'string', example: '2026-03-11T22:50:26.000000Z', format: 'date-time'),
                     ],
@@ -179,6 +193,7 @@ interface DeckControllerDocs
                         new OA\Property(property: 'commander_name', type: 'string', example: 'Atraxa, Praetors\' Voice'),
                         new OA\Property(property: 'commander_colors', type: 'array', example: '["G", "W", "U", "B"]', items: new OA\Items(type: 'string')),
                         new OA\Property(property: 'image_url', type: 'string', example: 'https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796'),
+                        new OA\Property(property: 'art_crop', type: 'string', example: 'https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541'),
                         new OA\Property(property: 'created_at', type: 'string', example: '2026-03-11T22:50:26.000000Z', format: 'date-time'),
                         new OA\Property(property: 'updated_at', type: 'string', example: '2026-03-11T22:50:26.000000Z', format: 'date-time'),
                     ],
@@ -230,4 +245,34 @@ interface DeckControllerDocs
         ]
     )]
     public function delete(string $id);
+
+    #[OA\Get(
+        path: '/api/decks',
+        summary: 'Lists decks',
+        tags:["Decks"],
+        parameters:[
+            new OA\Parameter(
+                name:"page",
+                in:"query",
+                required:true,
+                description:"The list page",
+                schema: new OA\Schema(type:"integer")
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'A deck list with fewer properties (below) and the pagination data',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer', example: 1),
+                        new OA\Property(property: 'name', type: 'string', example: 'Atraxa superfriends'),
+                        new OA\Property(property: 'art_crop', type: 'string', example: 'https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541'),
+                    ],
+                    type: 'object'
+                )
+            )
+        ]
+    )]
+    public function index(Request $req);
 }

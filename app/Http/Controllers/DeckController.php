@@ -11,6 +11,13 @@ use Illuminate\Validation\Rule;
 
 class DeckController extends Controller implements DeckControllerDocs
 {
+
+    public function index(Request $req) 
+    {
+        $decks = Deck::paginate(10, ['id', 'name', 'art_crop']);
+
+        return ApiResponse::success($decks);
+    }
     
     public function create(Request $req)
     {
@@ -41,7 +48,8 @@ class DeckController extends Controller implements DeckControllerDocs
             'commander_name'     => 'string|required|max:255',
             'commander_colors'   => 'required|array',
             'commander_colors.*' => Rule::in(Card::COLORS),
-            'image_url'          => 'string|required'
+            'image_url'          => 'string|required',
+            'art_crop'           => 'string|required'
         ]);
     }
 
