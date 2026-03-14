@@ -66,4 +66,34 @@ interface CardControllerDocs
         ]
     )]
     public function getCardPrints(Request $req);
+
+    #[OA\Get(
+        path:"/cards/autocomplete",
+        summary:"Autocomplete for cards search inputs",
+        description:"Search cards using the Scryfall API autocomplete endpoint",
+        tags:["Cards"],
+        parameters:[
+            new OA\Parameter(
+                name:"q",
+                in:"query",
+                required:true,
+                description:"Search query",
+                schema: new OA\Schema(type:"string", example:"sol ring")
+            )
+        ],
+        responses:[
+            new OA\Response(response:200, description:"Array of card names (string)"),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The q is required.'),
+                        new OA\Property(property: 'errors', type: 'object'),
+                    ]
+                )
+            )
+        ]
+    )]
+    public function autoComplete(Request $req);
 }

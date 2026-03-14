@@ -104,6 +104,52 @@
                 }
             }
         },
+        "/cards/autocomplete": {
+            "get": {
+                "tags": [
+                    "Cards"
+                ],
+                "summary": "Autocomplete for cards search inputs",
+                "description": "Search cards using the Scryfall API autocomplete endpoint",
+                "operationId": "5e1123419fc9ec0261b57c08477f2abe",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Search query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "sol ring"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of card names (string)"
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The q is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/decks": {
             "get": {
                 "tags": [

@@ -31,4 +31,13 @@ class CardController extends Controller implements CardControllerDocs
 
         return ApiResponse::success($prints);
     }
+
+    public function autoComplete(Request $req)
+    {
+        $req->validate(['q' => 'required']);
+
+        $response = $this->scryfall->autoComplete($req->q);
+
+        return ApiResponse::success($response);
+    }
 }

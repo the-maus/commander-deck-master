@@ -6,13 +6,13 @@ import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 const AppNavbar = () => {
     const navItems = [
-        { name: "Home", path: "/" },
-        { name: "My Decks", path: "/decks" },
+        { name: "My Decks", path: "/" },
+        { name: "New Deck", path: "/new-deck" },
     ];
 
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
-            <Container className="m-0">
+            <Container className="m-0" fluid>
                 <Navbar.Brand as={NavLink} to="/" className="navbar-brand">
                     <img
                         src={logo}

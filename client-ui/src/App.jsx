@@ -3,8 +3,8 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Navbar from "./components/Navbar";
-import Decks from "./components/Decks";
-import { useState } from "react";
+import Decks from "./pages/Decks";
+import NewDeck from "./pages/NewDeck";
 
 function App() {
     return (
@@ -12,7 +12,8 @@ function App() {
             <BrowserRouter>
                 <Navbar/>
 				<Routes>
-					<Route path="/decks" element={<Decks />} />
+					<Route path="/" element={<Decks />} />
+					<Route path="/new-deck" element={<NewDeck />} />
 				</Routes>
             </BrowserRouter>
 		</>

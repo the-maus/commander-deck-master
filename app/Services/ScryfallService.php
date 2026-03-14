@@ -36,6 +36,11 @@ class ScryfallService
         return $this->makeRequest($parameters);
     }
 
+    public function autoComplete($query)
+    {
+        return $this->makeRequest(['q' => $query], '/cards/autocomplete');
+    }
+
     private function makeRequest($parameters = [], $endpoint = '/cards/search')
     {
         // avoid "HTTP 429 Too Many Requests"

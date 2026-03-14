@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 // Cards
 Route::get('/cards/search', [CardController::class, 'search'])->name('cards_search');
+Route::get('/cards/autocomplete', [CardController::class, 'autoComplete'])->name('cards_autocomplete');
 Route::get('/cards/prints', [CardController::class, 'getCardPrints'])->name('cards_prints');
 
 // Decks
