@@ -16,7 +16,7 @@ interface DeckControllerDocs
             required: true,
             content: new OA\JsonContent(
                 type: 'object',
-                required: ['name', 'commander_name', 'commander_colors', 'image_url', 'art_crop'],
+                required: ['name', 'commander_name'],
                 properties: [
                     new OA\Property(
                         property: 'name',
@@ -29,13 +29,6 @@ interface DeckControllerDocs
                         type: 'string',
                         description: 'The commander card name',
                         example: "Atraxa, Praetors' Voice"
-                    ),
-                    new OA\Property(
-                        property: 'commander colors',
-                        type: 'string',
-                        enum: Card::COLORS,
-                        description: 'Array containing the color codes',
-                        example: '["G", "W", "U", "B"]'
                     ),
                     new OA\Property(
                         property: 'image_url',
@@ -114,13 +107,6 @@ interface DeckControllerDocs
                         type: 'string',
                         description: 'The commander card name',
                         example: "Atraxa, Praetors' Voice"
-                    ),
-                    new OA\Property(
-                        property: 'commander colors',
-                        type: 'string',
-                        enum: Card::COLORS,
-                        description: 'Array containing the color codes',
-                        example: '["G", "W", "U", "B"]'
                     ),
                     new OA\Property(
                         property: 'image_url',

@@ -208,10 +208,7 @@
                             "schema": {
                                 "required": [
                                     "name",
-                                    "commander_name",
-                                    "commander_colors",
-                                    "image_url",
-                                    "art_crop"
+                                    "commander_name"
                                 ],
                                 "properties": {
                                     "name": {
@@ -223,18 +220,6 @@
                                         "description": "The commander card name",
                                         "type": "string",
                                         "example": "Atraxa, Praetors' Voice"
-                                    },
-                                    "commander colors": {
-                                        "description": "Array containing the color codes",
-                                        "type": "string",
-                                        "enum": [
-                                            "W",
-                                            "U",
-                                            "B",
-                                            "R",
-                                            "G"
-                                        ],
-                                        "example": "[\"G\", \"W\", \"U\", \"B\"]"
                                     },
                                     "image_url": {
                                         "description": "URL for the selected commander card print variation image",
@@ -452,18 +437,6 @@
                                         "description": "The commander card name",
                                         "type": "string",
                                         "example": "Atraxa, Praetors' Voice"
-                                    },
-                                    "commander colors": {
-                                        "description": "Array containing the color codes",
-                                        "type": "string",
-                                        "enum": [
-                                            "W",
-                                            "U",
-                                            "B",
-                                            "R",
-                                            "G"
-                                        ],
-                                        "example": "[\"G\", \"W\", \"U\", \"B\"]"
                                     },
                                     "image_url": {
                                         "description": "URL for the selected commander card print variation image",

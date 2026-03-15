@@ -40,4 +40,5 @@ class CardController extends Controller implements CardControllerDocs
 
         return ApiResponse::success($response);
     }
+
 }

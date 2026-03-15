@@ -1,27 +1,47 @@
-import React, { useState } from "react";
-import { Form, Button, Container } from "react-bootstrap";
+import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Button, Container, Alert } from "react-bootstrap";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import { useCardSearch } from "../hooks/useCardSearch";
+import api from "../services/api";
 
 const NewDeck = () => {
     const [name, setName] = useState("");
-    const [commander, setCommander] = useState("");
-    const {options, search, loading} = useCardSearch();
+    const { options, search, loading } = useCardSearch();
+    const [errors, setErrors] = useState([]);
+    const navigate = useNavigate();
+    const commanderNameInput = useRef();
 
-    const handleSubmit = (e) => {
+    const saveDeck = async (e) => {
         e.preventDefault();
 
-        const formData = {
-            name,
-            commander
-        };
+        let commander_name = commanderNameInput.current.state.selected.length === 0 
+                                ? commanderNameInput.current.state.text
+                                : commanderNameInput.current.state.selected[0];
 
+        setErrors([]);
+
+        const formData = {name, commander_name};
         console.log(formData);
+
+        try {
+            await api.post("/decks", formData);
+            navigate('/');
+        } catch (error) {
+            if (error.response && error.response.status === 422) {
+                setErrors(error.response.data.errors);
+            } else {
+                console.log(error.response.data);
+                setErrors({commander_name: [error.response.data.message]});
+            }
+        }
     };
 
     return (
         <Container className="mt-4">
-            <Form onSubmit={handleSubmit}>
+            <h1>Create Deck</h1>
+            <hr />
+            <Form onSubmit={saveDeck}>
                 <Form.Group className="mb-3" controlId="name">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
@@ -31,20 +51,29 @@ const NewDeck = () => {
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Group>
+                {errors.name && (
+                    <Alert key="name" variant="danger" className="mt-3">
+                        {errors.name[0]}
+                    </Alert>
+                )}
 
                 <Form.Group className="mb-3">
                     <Form.Label>Commander</Form.Label>
                     <AsyncTypeahead
                         id="commander-autocomplete"
                         isLoading={loading}
+                        ref={commanderNameInput}
                         onSearch={search}
                         options={options}
                         placeholder="Type your commander name..."
-                        onChange={setCommander}
-                        selected={commander}
                         clearButton
                     />
                 </Form.Group>
+                {errors.commander_name && (
+                    <Alert key="danger" variant="danger" className="mt-3">
+                        {errors.commander_name[0]}
+                    </Alert>
+                )}
 
                 <Button variant="primary" type="submit">
                     Create

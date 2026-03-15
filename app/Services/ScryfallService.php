@@ -41,7 +41,12 @@ class ScryfallService
         return $this->makeRequest(['q' => $query], '/cards/autocomplete');
     }
 
-    private function makeRequest($parameters = [], $endpoint = '/cards/search')
+    public function named($fuzzy)
+    {
+        return $this->makeRequest(compact('fuzzy'), '/cards/named', false);
+    }
+
+    private function makeRequest($parameters = [], $endpoint = '/cards/search', $getData = true)
     {
         // avoid "HTTP 429 Too Many Requests"
         usleep(100 * 1000); // 100 milisseconds
@@ -49,7 +54,10 @@ class ScryfallService
         $response = $this->client->get(self::BASE_URL . $endpoint, $parameters);
         if(!$response->successful())
             Log::error("Unexpected Api Response Status Code: {$response->status()}", $response->json());
-    
-        return $response->json()['data'] ?? [];
+        
+        if ($getData)
+            return $response->json()['data'] ?? [];
+        else 
+            return $response->json() ?? [];
     }
 }
