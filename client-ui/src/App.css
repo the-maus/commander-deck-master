@@ -6,3 +6,86 @@ body {
 #root {
     width: 100%;
 }
+
+.alert-danger {
+    --bs-alert-color: white;
+    --bs-alert-bg: #ee438a;
+    --bs-alert-border-color: #e4cef5;
+}
+
+.text-primary {
+    color: #731fa1 !important; /* Use !important if needed to override Bootstrap's default styles */
+}
+
+.nav-link,
+.navbar-brand {
+    transition:
+        text-shadow 0.6s ease-in-out,
+        color 0.6s ease-in-out;
+}
+
+.nav-link:hover,
+.navbar-brand:hover {
+    color: #fff; /* Text color on hover */
+    text-shadow:
+        0 0 1px #e4cef5,
+        /* First shadow layer */ 0 0 2px #e4cef5,
+        /* Second shadow layer */ 0 0 4px #e4cef5,
+        /* Third shadow layer */ 0 0 8px #e4cef5; /* Fourth shadow layer, creating the glow */
+    filter: drop-shadow(0 0 10px #e4cef5) drop-shadow(0 0 20px #e4cef5);
+}
+
+.navbar-dark {
+    background-color: #593196 !important;
+}
+
+.form-control {
+    border: #593196 solid;
+    border-width: 1px;
+    color: #593196 !important;
+}
+
+.spinner {
+    background-image: linear-gradient(rgb(186, 66, 255) 35%, rgb(0, 225, 255));
+    width: 100px;
+    height: 100px;
+    animation: spinning82341 1.7s linear infinite;
+    text-align: center;
+    border-radius: 50px;
+    filter: blur(1px);
+    box-shadow:
+        0px -5px 20px 0px rgb(186, 66, 255),
+        0px 5px 20px 0px rgb(0, 225, 255);
+}
+
+.overlay {
+    position: fixed; /* Positions the element relative to the browser window */
+    top: 0; /* Aligns to the top edge of the viewport */
+    left: 0; /* Aligns to the left edge of the viewport */
+    width: 100vw; /* Makes it fill the full viewport width */
+    height: 100vh; /* Makes it fill the full viewport height */
+    z-index: 100; /* Ensures it stays on top of other content (adjust as needed) */
+    opacity: 0.7; /* Makes it matte and semi-transparent */
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    height: 100vh;
+}
+
+.spinner1 {
+    background-color: rgb(36, 36, 36);
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    filter: blur(10px);
+}
+
+@keyframes spinning82341 {
+    to {
+        transform: rotate(360deg);
+    }
+}

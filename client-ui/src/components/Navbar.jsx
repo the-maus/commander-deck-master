@@ -1,13 +1,13 @@
 import React from "react";
 import logo from "./../assets/logo.png";
 import { NavLink } from "react-router";
-
 import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { PlusCircleFill, ListUl} from "react-bootstrap-icons";
 
 const AppNavbar = () => {
     const navItems = [
-        { name: "My Decks", path: "/" },
-        { name: "New Deck", path: "/new-deck" },
+        { name: "My Decks", path: "/", icon: <ListUl />},
+        { name: "New Deck", path: "/new-deck", icon: <PlusCircleFill className="mb-1"/> },
     ];
 
     return (
@@ -17,7 +17,7 @@ const AppNavbar = () => {
                     <img
                         src={logo}
                         width={30}
-                        className="d-inline-block align-text-top"
+                        className="d-inline-block align-text-top me-2"
                     />
                     Commander Deck Master
                 </Navbar.Brand>
@@ -31,7 +31,7 @@ const AppNavbar = () => {
                                 to={item.path}
                                 className="nav-link"
                             >
-                                {item.name}
+                                {item.name}  {item.icon}
                             </Nav.Link>
                         ))}
                     </Nav>

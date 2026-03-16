@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, CardLink } from "react-bootstrap";
+import {
+    ArrowRight,
+    CaretLeftFill,
+    CaretRightFill,
+    Forward,
+    Link,
+    RewindFill,
+} from "react-bootstrap-icons";
 import api from "../services/api";
+import Loading from "../components/Loading";
+import { useNavigate } from "react-router";
 
 const Decks = () => {
     const [decks, setDecks] = useState([]);
@@ -8,6 +18,8 @@ const Decks = () => {
     const [nextPage, setNextPage] = useState(true);
     const [prevPage, setPrevPage] = useState(false);
     const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     const loadDecks = async () => {
         setLoading(true);
@@ -32,51 +44,61 @@ const Decks = () => {
 
     return (
         <>
-            {!loading && (
-                <Container fluid>
-                    <Row>
-                        {decks &&
-                            decks.map((deck) => (
-                                <Col md={4} className="mb-4">
-                                    <Card>
-                                        <img
-                                            src={deck.art_crop}
-                                            className="card-img-top"
-                                            alt="Image 1"
-                                        />
-                                        <Card.Body>
-                                            <Card.Title className="card-title text-primary">
-                                                {deck.name}
-                                            </Card.Title>
-                                            <Card.Text>
-                                                {deck.commander_name}
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            ))}
-                    </Row>
+            <Container fluid>
+                <Row>
+                    {decks &&
+                        decks.map((deck) => (
+                            <Col md={4} className="mb-4">
+                                <Card
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() =>
+                                        navigate(`/edit-deck/${deck.id}`)
+                                    }
+                                >
+                                    <img
+                                        src={deck.art_crop}
+                                        className="card-img-top"
+                                        alt="Image 1"
+                                    />
+                                    <Card.Body>
+                                        <Card.Title className="card-title text-primary">
+                                            {deck.name}
+                                        </Card.Title>
+                                        <Card.Text>
+                                            {deck.commander_name}
+                                        </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                </Row>
+                {!loading && (
                     <Container>
                         <Row className="align-items-center">
                             <Col className="text-center">
                                 {prevPage && (
-                                    <Button variant="secondary" className="me-2" onClick={() => setPage(page - 1)}>
+                                    <Button
+                                        variant="secondary"
+                                        className="me-2"
+                                        onClick={() => setPage(page - 1)}
+                                    >
                                         Back
                                     </Button>
                                 )}
                                 {nextPage && (
-                                    <Button variant="primary" onClick={() => setPage(page + 1)}>Next</Button>
+                                    <Button
+                                        variant="primary"
+                                        onClick={() => setPage(page + 1)}
+                                    >
+                                        Next
+                                    </Button>
                                 )}
                             </Col>
                         </Row>
                     </Container>
-                </Container>
-            )}
-            {loading && (
-                <Container fluid>
-                    <h1>Loading...</h1>
-                </Container>
-            )}
+                )}
+            </Container>
+            {loading && <Loading />}
         </>
     );
 };

@@ -14,19 +14,19 @@ class DeckController extends Controller implements DeckControllerDocs
 {
     public function __construct(protected ScryfallService $scryfall) {}
 
-    public function index(Request $req) 
+    public function index(Request $req)
     {
         $decks = Deck::orderBy('name')->paginate(12, ['id', 'name', 'commander_name', 'art_crop']);
 
         return ApiResponse::success($decks);
     }
-    
+
     public function create(Request $req)
     {
         $this->validateDeckData($req);
 
         $cardInfo = $this->scryfall->named($req->commander_name);
-        if(!isset($cardInfo['id']))
+        if (!isset($cardInfo['id']))
             return ApiResponse::error('Card not found!', 404);
 
         $deck = Deck::create([
@@ -34,7 +34,7 @@ class DeckController extends Controller implements DeckControllerDocs
             'commander_name' => $cardInfo['printed_name'] ?? $cardInfo['name'],
             'commander_colors' => $cardInfo['color_identity'],
             'image_url' => $cardInfo['image_uris']['normal'],
-            'art_crop' => $cardInfo['image_uris']['art_crop'] 
+            'art_crop' => $cardInfo['image_uris']['art_crop']
         ]);
 
         return ApiResponse::success($deck, 201);
@@ -44,11 +44,21 @@ class DeckController extends Controller implements DeckControllerDocs
     {
         $this->validateDeckData($req);
 
+        $cardInfo = $this->scryfall->named($req->commander_name);
+        if (!isset($cardInfo['id']))
+            return ApiResponse::error('Card not found!', 404);
+
         $deck = Deck::find($id);
         if ($deck) {
-            $deck->update($req->all());
+            $deck->update([
+                'name' => $req->name,
+                'commander_name' => $cardInfo['printed_name'] ?? $cardInfo['name'],
+                'commander_colors' => $cardInfo['color_identity'],
+                'image_url' => $cardInfo['image_uris']['normal'],
+                'art_crop' => $cardInfo['image_uris']['art_crop']
+            ]);
             return ApiResponse::success($deck);
-        }else
+        } else
             return ApiResponse::error('Deck not found', 404);
     }
 
@@ -78,7 +88,7 @@ class DeckController extends Controller implements DeckControllerDocs
         if ($deck) {
             $deck->delete();
             return ApiResponse::success('Deck deleted successfully!');
-        }else
+        } else
             return ApiResponse::error('Deck not found', 404);
     }
 }
