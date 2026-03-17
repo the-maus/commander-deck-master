@@ -8,8 +8,8 @@ const Loading = () => {
             className="d-flex justify-content-center align-items-center mt-5"
         >
             <div className="overlay">
-                <div class="spinner">
-                    <div class="spinner1"></div>
+                <div className="spinner">
+                    <div className="spinner1"></div>
                 </div>
             </div>
         </Container>

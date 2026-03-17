@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button, CardLink } from "react-bootstrap";
-import {
-    ArrowRight,
-    CaretLeftFill,
-    CaretRightFill,
-    Forward,
-    Link,
-    RewindFill,
-} from "react-bootstrap-icons";
 import api from "../services/api";
 import Loading from "../components/Loading";
 import { useNavigate } from "react-router";
@@ -48,7 +40,7 @@ const Decks = () => {
                 <Row>
                     {decks &&
                         decks.map((deck) => (
-                            <Col md={4} className="mb-4">
+                            <Col md={4} className="mb-4" key={deck.id}>
                                 <Card className="rounded" 
                                     style={{ cursor: "pointer" }}
                                     onClick={() =>

@@ -6,17 +6,28 @@ import Navbar from "./components/Navbar";
 import Decks from "./pages/Decks";
 import NewDeck from "./pages/NewDeck";
 import EditDeck from "./pages/EditDeck";
+import Login from "./pages/Login";
+import AuthOnly from "./components/auth/AuthOnly";
+import GuestOnly from "./components/auth/GuestOnly";
 
 function App() {
     return (
         <>
             <BrowserRouter>
                 <Navbar/>
-				<Routes>
-					<Route path="/" element={<Decks />} />
-					<Route path="/new-deck" element={<NewDeck />} />
-					<Route path="/edit-deck/:deckId" element={<EditDeck />} />
-				</Routes>
+                <Routes>
+                    {/* guest routes */}
+                    <Route element={<GuestOnly />}>
+                        <Route path="/login" element={<Login />} />
+                    </Route>
+
+                    {/* authenticated routes */}
+                    <Route element={<AuthOnly />}>
+                        <Route path="/" element={<Decks />} />
+                        <Route path="/new-deck" element={<NewDeck />} />
+                        <Route path="/edit-deck/:deckId" element={<EditDeck />} />
+                    </Route>
+                </Routes>
             </BrowserRouter>
 		</>
     );
