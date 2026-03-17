@@ -15,6 +15,11 @@ use OpenApi\Attributes as OA;
  *     description="Local API server"
  * )
  */
+#[OA\OpenApi(
+    security: [
+        ["bearerAuth" => []]
+    ]
+)]
 class OpenApi
 {
 }
