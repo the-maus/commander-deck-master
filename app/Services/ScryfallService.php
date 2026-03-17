@@ -43,7 +43,7 @@ class ScryfallService
 
     public function named($fuzzy)
     {
-        return $this->makeRequest(compact('fuzzy'), '/cards/named', false);
+        return CardService::parseCardData($this->makeRequest(compact('fuzzy'), '/cards/named', false));
     }
 
     private function makeRequest($parameters = [], $endpoint = '/cards/search', $getData = true)

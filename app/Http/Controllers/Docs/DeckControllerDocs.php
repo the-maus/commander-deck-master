@@ -261,4 +261,76 @@ interface DeckControllerDocs
         ]
     )]
     public function index(Request $req);
+
+    #[OA\Put(
+        path: '/api/decks/{id}/add-card',
+        summary: 'Add card to an existing deck',
+        tags:["Decks"],
+        parameters:[
+            new OA\Parameter(
+                name:"id",
+                in:"path",
+                required:true,
+                description:"The deck unique ID",
+                schema: new OA\Schema(type:"integer")
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                required: ['name'],
+                properties: [
+                    new OA\Property(
+                        property: 'card_name',
+                        type: 'string',
+                        description: 'The name of the card to be added on the deck',
+                        example: 'Swords to Plowshares'
+                    ),
+                    new OA\Property(
+                        property: 'image_url',
+                        type: 'string',
+                        description: 'URL for alternative card print image',
+                        example: 'https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796'
+                    ),
+                    new OA\Property(
+                        property: 'extra_image',
+                        type: 'string',
+                        description: 'URL for the extra card image\'s (for double faced cards) alternative art',
+                        example: 'https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541'
+                    ),
+                ],
+            ),
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Deck updated successfully',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer', example: 1),
+                        new OA\Property(property: 'name', type: 'string', example: 'Atraxa superfriends'),
+                        new OA\Property(property: 'commander_name', type: 'string', example: 'Atraxa, Praetors\' Voice'),
+                        new OA\Property(property: 'commander_colors', type: 'array', example: '["G", "W", "U", "B"]', items: new OA\Items(type: 'string')),
+                        new OA\Property(property: 'image_url', type: 'string', example: 'https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796'),
+                        new OA\Property(property: 'art_crop', type: 'string', example: 'https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541'),
+                        new OA\Property(property: 'created_at', type: 'string', example: '2026-03-11T22:50:26.000000Z', format: 'date-time'),
+                        new OA\Property(property: 'updated_at', type: 'string', example: '2026-03-11T22:50:26.000000Z', format: 'date-time'),
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'message', type: 'string', example: 'The name field is required.'),
+                        new OA\Property(property: 'errors', type: 'object'),
+                    ]
+                )
+            )
+        ]
+    )]
+    public function addCard(Request $req, string $id);
 }

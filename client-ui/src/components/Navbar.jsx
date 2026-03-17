@@ -11,7 +11,7 @@ const AppNavbar = () => {
     ];
 
     return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top" className="mb-3">
             <Container className="m-0" fluid>
                 <Navbar.Brand as={NavLink} to="/" className="navbar-brand">
                     <img

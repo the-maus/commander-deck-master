@@ -567,6 +567,126 @@
                     }
                 }
             }
+        },
+        "/api/decks/{id}/add-card": {
+            "put": {
+                "tags": [
+                    "Decks"
+                ],
+                "summary": "Add card to an existing deck",
+                "operationId": "b26f0e86855bc48f3461fdc30650cc0c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The deck unique ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "card_name": {
+                                        "description": "The name of the card to be added on the deck",
+                                        "type": "string",
+                                        "example": "Swords to Plowshares"
+                                    },
+                                    "image_url": {
+                                        "description": "URL for alternative card print image",
+                                        "type": "string",
+                                        "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                    },
+                                    "extra_image": {
+                                        "description": "URL for the extra card image's (for double faced cards) alternative art",
+                                        "type": "string",
+                                        "example": "https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Deck updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Atraxa superfriends"
+                                        },
+                                        "commander_name": {
+                                            "type": "string",
+                                            "example": "Atraxa, Praetors' Voice"
+                                        },
+                                        "commander_colors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "example": "[\"G\", \"W\", \"U\", \"B\"]"
+                                        },
+                                        "image_url": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/normal/front/d/0/d0d33d52-3d28-4635-b985-51e126289259.jpg?1599707796"
+                                        },
+                                        "art_crop": {
+                                            "type": "string",
+                                            "example": "https://cards.scryfall.io/art_crop/front/1/c/1cc9e7cb-d4f4-4f06-b232-f91eb39fe1b3.jpg?1734853541"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-03-11T22:50:26.000000Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2026-03-11T22:50:26.000000Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [

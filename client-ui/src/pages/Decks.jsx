@@ -49,7 +49,7 @@ const Decks = () => {
                     {decks &&
                         decks.map((deck) => (
                             <Col md={4} className="mb-4">
-                                <Card
+                                <Card className="rounded" 
                                     style={{ cursor: "pointer" }}
                                     onClick={() =>
                                         navigate(`/edit-deck/${deck.id}`)

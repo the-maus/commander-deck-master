@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Deck extends Model
 {
@@ -18,8 +19,8 @@ class Deck extends Model
         'commander_colors' => 'array'
     ];
 
-    public function deckCards()
+    public function cards() : BelongsToMany
     {
-        return $this->hasMany(DeckCard::class);
+        return $this->belongsToMany(Card::class, 'deck_cards')->using(DeckCard::class);
     }
 }

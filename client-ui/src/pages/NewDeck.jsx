@@ -58,6 +58,7 @@ const NewDeck = () => {
                             placeholder="Enter the deck name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            required
                         />
                     </Form.Group>
                     {errors.name && (
