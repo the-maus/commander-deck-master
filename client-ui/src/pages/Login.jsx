@@ -4,7 +4,7 @@ import { Form, Button, Container, Alert, Row, Col } from "react-bootstrap";
 import api from "../services/api";
 import { Plus } from "react-bootstrap-icons";
 import Loading from "../components/Loading";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ const Login = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const {setAccessToken} = useAuth();
+    const { login: storeUser } = useAuth();
 
     const login = async (e) => {
         e.preventDefault();
@@ -23,8 +23,7 @@ const Login = () => {
 
         try {
             const response = await api.post('/login', data);
-            // setAuth(response.data.user.name, response.data.access_token);
-            setAccessToken(response.data.access_token);
+            storeUser(response.data.user, response.data.access_token);
 
             navigate('/');
         } catch (error) {

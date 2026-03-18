@@ -1,11 +1,8 @@
-import { Outlet, Navigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-const GuestOnly = () => {
-    const { authenticated } = useAuth(); // Check auth status
-
-    // If guest (not authenticated), render the child routes; otherwise, redirect to main page
-    return !authenticated() ? <Outlet /> : <Navigate to="/" replace />;
+const GuestOnly = ({ user }) => {
+    // If guest (not authenticated) render the child elements, otherwise redirect to main page
+    return !user ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 export default GuestOnly;

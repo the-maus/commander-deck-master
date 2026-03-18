@@ -1,9 +1,9 @@
 import React from "react";
 import logo from "./../assets/logo.png";
 import { NavLink } from "react-router";
-import { Container, Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { Container, Navbar, Nav } from "react-bootstrap";
 import { PlusCircleFill, ListUl } from "react-bootstrap-icons";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
 const AppNavbar = () => {
     const navItems = [
@@ -15,7 +15,7 @@ const AppNavbar = () => {
         },
     ];
 
-    const { accessToken } = useAuth();
+    const { user, logout } = useAuth();
 
     return (
         <Navbar
@@ -31,11 +31,11 @@ const AppNavbar = () => {
                     <img
                         src={logo}
                         width={30}
-                        className="d-inline-block align-text-top me-2"
+                        className="d-inline-block align-text-top me-1"
                     />
                     Commander Deck Master
                 </Navbar.Brand>
-                {accessToken && (
+                {user && (
                     <>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">

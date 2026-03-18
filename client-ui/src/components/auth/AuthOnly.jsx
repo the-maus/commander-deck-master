@@ -1,11 +1,8 @@
-import { Outlet, Navigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-const AuthOnly = () => {
-    const { authenticated } = useAuth(); // Check auth status
-
+const AuthOnly = ({ user }) => {
     // If authenticated, render the child routes; otherwise, redirect to login
-    return authenticated() ? <Outlet /> : <Navigate to="/login" replace />;
+    return user ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default AuthOnly;
