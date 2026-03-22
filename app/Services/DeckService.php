@@ -14,7 +14,7 @@ class DeckService
         protected CardService $cardService
     ) {}
 
-    public function addCardToDeck(Deck $deck, $cardData, $request = []): bool|string
+    public function addCardToDeck(Deck $deck, $cardData, $request = []): string|Card
     {
         try {
             $validation = $this->validateCardOnDeck($deck, $cardData);
@@ -27,27 +27,30 @@ class DeckService
             if (!$card)
                 return "An error occured while saving the card";
 
-            /** @var DeckCard $deckCard */ 
+            /** @var DeckCard $deckCard */
             $deckCard = $deck->cards()->withPivot('quantity')->where('card_id', $card->id)->first();
             $quantity = 1;
+
+            $image_url = $request['image_url'] ?? $cardData['image_uris']['normal'];
+            $extra_image = $request['extra_image'] ?? $cardData['card_faces'][1]['image_uris']['normal'] ?? '';
+            $printed_name = $cardData['printed_name'] ?? $cardData['name'];
+
+            $deckCardData = compact('quantity', 'image_url', 'extra_image', 'printed_name');
 
             // if card's already on deck (aka basic land), just increment quantity
             if ($deckCard) {
                 $quantity += $deckCard->pivot->quantity;
-                $deck->cards()->updateExistingPivot($card->id, compact('quantity'));
+                $deckCardData['quantity'] = $quantity;
+                $deck->cards()->updateExistingPivot($card->id, $deckCardData);
             } else { // add card to deck
-                $image_url = $request['image_url'] ?? $cardData['image_uris']['normal'];
-                $extra_image = $request['extra_image'] ?? $cardData['card_faces'][1]['image_uris']['normal'] ?? '';
-                $printed_name = $cardData['printed_name'] ?? $cardData['name'];
-
-                $deck->cards()->attach($card->id, compact('quantity', 'image_url', 'extra_image', 'printed_name'));
+                $deck->cards()->attach($card->id, $deckCardData);
             }
+
+            return CardService::setCustomDetails($deck->cards()->withPivot('image_url', 'quantity', 'extra_image', 'printed_name')->find($card->id));
         } catch (\Exception $e) {
             Log::error("Error while adding card to deck: " . $e->getMessage(), compact('deck', 'cardData', 'request'));
             return "Sorry, an occurred when adding card to deck";
         }
-
-        return true;
     }
 
     private function validateCardOnDeck(Deck $deck, $cardData)

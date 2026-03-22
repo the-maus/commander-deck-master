@@ -6,6 +6,7 @@ use App\Http\Controllers\Docs\DeckControllerDocs;
 use App\Models\Card;
 use App\Models\Deck;
 use App\Services\ApiResponse;
+use App\Services\CardService;
 use App\Services\DeckService;
 use App\Services\ScryfallService;
 use Illuminate\Http\Request;
@@ -68,13 +69,9 @@ class DeckController extends Controller implements DeckControllerDocs
         if ($result) {
             $deck = $result->toArray();
             $deck['cards'] = $result->cards()->withPivot('quantity', 'image_url', 'extra_image', 'printed_name')->get()->map(function($card){
-                $card->quantity = $card->pivot->quantity;
-                $card->image_url = $card->pivot->image_url;
-                $card->extra_image = $card->pivot->extra_image;
-                $card->name = $card->pivot->printed_name;
-                unset($card->pivot);
-                return $card;
+               return CardService::setCustomDetails($card);
             });
+
             return ApiResponse::success($deck);
         } else
             return ApiResponse::error('Deck not found', 404);
@@ -100,9 +97,16 @@ class DeckController extends Controller implements DeckControllerDocs
         ]);
 
         // get deck (commander) info
+        /** @var Deck deck */
         $deck = Deck::find($id);
         if (!$deck)
             return ApiResponse::error('Deck not found', 404);
+
+
+        // check first if card exists by name for performance purpose
+        $duplicateCard = $deck->cards()->where('name', $req->card_name)->orWherePivot('printed_name', $req->card_name)->first();
+        if ($duplicateCard && !str_contains($duplicateCard->type_line, 'Basic Land'))
+            return ApiResponse::error('This card is already on the deck');
 
         // get card info
         $cardData = $this->scryfall->named($req->card_name);
@@ -110,9 +114,10 @@ class DeckController extends Controller implements DeckControllerDocs
             return ApiResponse::error('Card not found', 404);
 
         $result = $this->deckService->addCardToDeck($deck, $cardData, $req->all());
-        if ($result !== true)
-            return ApiResponse::error($result);
+        
+        if ($result instanceof Card)
+            return ApiResponse::success($result);
         else
-            return ApiResponse::success('Card added successfully');
+            return ApiResponse::error($result);
     }
 }

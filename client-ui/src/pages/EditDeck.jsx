@@ -1,22 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import {
-    Form,
-    Button,
-    Container,
     Alert,
-    Row,
+    Button,
     Col,
+    Container,
+    Form,
     Image,
     InputGroup,
-    FormControl,
+    Row
 } from "react-bootstrap";
+import { Plus } from "react-bootstrap-icons";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
+import { useNavigate, useParams } from "react-router-dom";
+import CardGrid from "../components/CardGrid";
+import Loading from "../components/Loading";
+import BootstrapModal from "../components/Modal";
 import { useCardSearch } from "../hooks/useCardSearch";
 import api from "../services/api";
-import Loading from "../components/Loading";
-import { Plus, PlusSquare, PlusSquareFill } from "react-bootstrap-icons";
-import CardGrid from "../components/CardGrid";
 
 const EditDeck = () => {
     const [id, setId] = useState(null);
@@ -24,16 +24,19 @@ const EditDeck = () => {
     const [commanderName, setCommanderName] = useState([""]);
     const [commanderImage, setCommanderImage] = useState("");
     const commanderNameInput = useRef();
-    
-    const [searchCard, setSearchCard] = useState("")
-    const [searchCardImage, setSearchCardImage] = useState("");
+
+    const [searchCard, setSearchCard] = useState("");
     const searchcardInput = useRef();
 
     const [deckCards, setDeckCards] = useState([]);
 
     const navigate = useNavigate();
     const { options, search, loading: cardLoading } = useCardSearch();
-    const { options: optionsSearch, search: searchSearch, loading: searchLoading } = useCardSearch();
+    const {
+        options: optionsSearch,
+        search: searchSearch,
+        loading: searchLoading,
+    } = useCardSearch();
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const { deckId } = useParams();
@@ -59,15 +62,19 @@ const EditDeck = () => {
             console.log(response.data.data.cards);
             setDeckCards(response.data.data.cards);
 
-            // clear search card input
-            setSearchCard([]);
-            searchcardInput.current.state.text = "";
+            clearSearch();
 
             setLoading(false);
         } catch (error) {
             console.log(error.response);
         }
     }
+
+    const clearSearch = () => {
+        // clear search card input
+        setSearchCard([]);
+        searchcardInput.current.state.text = "";
+    };
 
     const editDeck = async (e) => {
         e.preventDefault();
@@ -93,28 +100,47 @@ const EditDeck = () => {
         setLoading(false);
     };
 
+    const [addCardError, setAddCardError] = useState(false);
+
     const addCard = async (e) => {
         setLoading(true);
-        // setErrors([]);
+        setAddCardError(false);
         let card_name =
             searchcardInput.current.state.selected.length === 0
                 ? searchcardInput.current.state.text
                 : searchcardInput.current.state.selected[0];
         const formData = { card_name };
-        console.log(formData);
         try {
-            await api.put(`/decks/${id}/add-card`, formData);
-            loadDeck();
+            const response = await api.put(`/decks/${id}/add-card`, formData);
+            console.log(response.data.data);
+            addOrUpdateCardInList(response.data.data);
         } catch (error) {
-            // if (error.response && error.response.status === 422) {
-            //     setErrors(error.response.data.errors);
-            // } else {
-            //     console.log(error.response.data);
-            //     setErrors({ commander_name: [error.response.data.message] });
-            // }
+            console.log(error.response.data.message);
+            setAddCardError(error.response.data.message);
         }
+        clearSearch();
         setLoading(false);
-    }
+    };
+
+    const addOrUpdateCardInList = (newCard) => {
+        // Check if the item already exists by finding its index
+        const existingItemIndex = deckCards.findIndex(
+            (card) => card.id === newCard.id,
+        );
+
+        if (existingItemIndex !== -1) {
+            // If the item exists, create a new array with the updated item
+            const updatedCards = [...deckCards]; // Create a shallow copy of the array
+            updatedCards[existingItemIndex] = {
+                ...updatedCards[existingItemIndex],
+                ...newCard,
+            }; // Update the item with new data
+            setDeckCards(updatedCards);
+        } else {
+            // If the item does not exist, add it to the end of a new array
+            setDeckCards((prevDeckCards) => [...prevDeckCards, newCard]); // Use functional state update
+        }
+    };
 
     return (
         <>
@@ -123,7 +149,7 @@ const EditDeck = () => {
                 <hr />
                 <Row>
                     {/* Commander name/card form */}
-                    <Col className="col-md-4 col-12 mb-4">
+                    <Col className="col-md-3 col-12 mb-4">
                         <Image
                             src={commanderImage}
                             rounded
@@ -195,8 +221,19 @@ const EditDeck = () => {
                     </Col>
 
                     {/* Card search and card list */}
-                    <Col className="col-md-8 col-12">
+                    <Col className="col-md-9 col-12">
                         {/* search */}
+                        {(addCardError !== false) && (
+                            <BootstrapModal
+                                title="Error"
+                                id="errorModal"
+                                showModal={typeof addCardError === "string"}
+                                setShowModal={setAddCardError}
+                                error={true}
+                            >
+                                <h6>{addCardError}</h6>
+                            </BootstrapModal>
+                        )}
                         <InputGroup className="mb-3">
                             <AsyncTypeahead
                                 id="search-autocomplete"
@@ -210,13 +247,16 @@ const EditDeck = () => {
                                 clearButton
                                 className="form-control border-0 p-0"
                             />
-                            <Button id="button-addon2" onClick={() => addCard()}>
+                            <Button
+                                id="button-addon2"
+                                onClick={() => addCard()}
+                            >
                                 <span>Add</span> <Plus className="mb-1" />
                             </Button>
                         </InputGroup>
 
                         {/* cards list */}
-                        {deckCards && <CardGrid cards={deckCards}/>}
+                        {deckCards && <CardGrid cards={deckCards} />}
                     </Col>
                 </Row>
             </Container>

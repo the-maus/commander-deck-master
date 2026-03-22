@@ -35,4 +35,14 @@ class CardService
 
         return $cardData;
     }
+
+    public static function setCustomDetails(Card $card): Card
+    {
+        $card->quantity = $card->pivot->quantity;
+        $card->image_url = $card->pivot->image_url;
+        $card->extra_image = $card->pivot->extra_image;
+        $card->name = $card->pivot->printed_name;
+        unset($card->pivot);
+        return $card;
+    }
 }
