@@ -31,8 +31,9 @@ const NewDeck = () => {
         console.log(formData);
 
         try {
-            await api.post("/decks", formData);
-            navigate("/");
+            const response = await api.post("/decks", formData);
+            console.log(response)
+            navigate(`/edit-deck/${response.data.data.id}`);
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 setErrors(error.response.data.errors);

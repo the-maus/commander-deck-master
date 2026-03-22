@@ -63,11 +63,20 @@ class DeckController extends Controller implements DeckControllerDocs
 
     public function show(string $id)
     {
-        $deck = Deck::find($id);
-
-        if ($deck)
+        $result = Deck::with('cards')->find($id);
+        
+        if ($result) {
+            $deck = $result->toArray();
+            $deck['cards'] = $result->cards()->withPivot('quantity', 'image_url', 'extra_image', 'printed_name')->get()->map(function($card){
+                $card->quantity = $card->pivot->quantity;
+                $card->image_url = $card->pivot->image_url;
+                $card->extra_image = $card->pivot->extra_image;
+                $card->name = $card->pivot->printed_name;
+                unset($card->pivot);
+                return $card;
+            });
             return ApiResponse::success($deck);
-        else
+        } else
             return ApiResponse::error('Deck not found', 404);
     }
 

@@ -9,6 +9,7 @@ export const useCardSearch = () => {
 	const [canceled, setCanceled] = useState(false);
 
     async function search(query) {
+        console.log(query)
         if (canceled) return;
 
         setLoading(true);

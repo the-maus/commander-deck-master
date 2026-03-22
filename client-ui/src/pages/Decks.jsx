@@ -32,7 +32,7 @@ const Decks = () => {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 console.log(error.response.data.message)
-                logout(null);
+                logout();
                 navigate('/login');
             }
         }

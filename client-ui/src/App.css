@@ -35,8 +35,30 @@ body {
     filter: drop-shadow(0 0 10px #e4cef5) drop-shadow(0 0 20px #e4cef5);
 }
 
+/* search card input remove button */
+.rbt-aux {
+    float: right;
+    margin-top: -30px;
+    margin-right: 10px;
+}
+
+.rbt-close span {
+    display: none;
+}
+
 .navbar-dark {
     background-color: #593196 !important;
+}
+
+.navbar-nav .dropdown-menu {
+    position: static;
+    background-color: #593196;
+    border: none;
+    /* color: white; */
+}
+
+.navbar-nav .dropdown-menu a {
+    background-color: transparent !important;
 }
 
 .form-control {
@@ -88,4 +110,19 @@ body {
     to {
         transform: rotate(360deg);
     }
+}
+
+/* cards grid */
+.cardsGrid .card img {
+  border-radius: 8px;
+}
+
+.cardsGrid .card {
+  border: none;
+  background: transparent;
+}
+
+.cardsGrid .badge {
+  font-size: 0.8rem;
+  padding: 5px 7px;
 }

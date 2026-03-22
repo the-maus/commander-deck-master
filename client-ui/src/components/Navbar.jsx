@@ -1,8 +1,8 @@
 import React from "react";
 import logo from "./../assets/logo.png";
 import { NavLink } from "react-router";
-import { Container, Navbar, Nav } from "react-bootstrap";
-import { PlusCircleFill, ListUl } from "react-bootstrap-icons";
+import { Container, Navbar, Nav, NavDropdown, Dropdown, Button } from "react-bootstrap";
+import { PlusCircleFill, ListUl, PersonCircle, BoxArrowRight } from "react-bootstrap-icons";
 import { useAuth } from "../context/AuthContext";
 
 const AppNavbar = () => {
@@ -47,9 +47,26 @@ const AppNavbar = () => {
                                         to={item.path}
                                         className="nav-link"
                                     >
-                                        {item.name} {item.icon}
+                                        {item.icon} {item.name}
                                     </Nav.Link>
                                 ))}
+                                <NavDropdown
+                                    title={
+                                        <span>
+                                            <PersonCircle className="mb-1" />{" "}
+                                            {user.name}
+                                        </span>
+                                    }
+                                    id="navbarScrollingDropdown"
+                                >
+                                    <NavDropdown.Item className="nav-link ms-3" onClick={() => logout()}>
+                                        <BoxArrowRight /> Logout
+                                    </NavDropdown.Item>
+                                    {/* <NavDropdown.Divider /> */}
+                                    {/* <NavDropdown.Item href="#action5">
+                                        Something else here
+                                    </NavDropdown.Item> */}
+                                </NavDropdown>
                             </Nav>
                         </Navbar.Collapse>
                     </>

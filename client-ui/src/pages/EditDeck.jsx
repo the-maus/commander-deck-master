@@ -16,6 +16,7 @@ import { useCardSearch } from "../hooks/useCardSearch";
 import api from "../services/api";
 import Loading from "../components/Loading";
 import { Plus, PlusSquare, PlusSquareFill } from "react-bootstrap-icons";
+import CardGrid from "../components/CardGrid";
 
 const EditDeck = () => {
     const [id, setId] = useState(null);
@@ -23,10 +24,16 @@ const EditDeck = () => {
     const [commanderName, setCommanderName] = useState([""]);
     const [commanderImage, setCommanderImage] = useState("");
     const commanderNameInput = useRef();
-    const cardSearchInput = useRef();
+    
+    const [searchCard, setSearchCard] = useState("")
+    const [searchCardImage, setSearchCardImage] = useState("");
+    const searchcardInput = useRef();
+
+    const [deckCards, setDeckCards] = useState([]);
 
     const navigate = useNavigate();
     const { options, search, loading: cardLoading } = useCardSearch();
+    const { options: optionsSearch, search: searchSearch, loading: searchLoading } = useCardSearch();
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const { deckId } = useParams();
@@ -48,6 +55,13 @@ const EditDeck = () => {
 
             // get commander image
             setCommanderImage(response.data.data.image_url);
+
+            console.log(response.data.data.cards);
+            setDeckCards(response.data.data.cards);
+
+            // clear search card input
+            setSearchCard([]);
+            searchcardInput.current.state.text = "";
 
             setLoading(false);
         } catch (error) {
@@ -79,6 +93,29 @@ const EditDeck = () => {
         setLoading(false);
     };
 
+    const addCard = async (e) => {
+        setLoading(true);
+        // setErrors([]);
+        let card_name =
+            searchcardInput.current.state.selected.length === 0
+                ? searchcardInput.current.state.text
+                : searchcardInput.current.state.selected[0];
+        const formData = { card_name };
+        console.log(formData);
+        try {
+            await api.put(`/decks/${id}/add-card`, formData);
+            loadDeck();
+        } catch (error) {
+            // if (error.response && error.response.status === 422) {
+            //     setErrors(error.response.data.errors);
+            // } else {
+            //     console.log(error.response.data);
+            //     setErrors({ commander_name: [error.response.data.message] });
+            // }
+        }
+        setLoading(false);
+    }
+
     return (
         <>
             <Container className="mt-4" fluid>
@@ -86,7 +123,7 @@ const EditDeck = () => {
                 <hr />
                 <Row>
                     {/* Commander name/card form */}
-                    <Col className="col-md-4">
+                    <Col className="col-md-4 col-12 mb-4">
                         <Image
                             src={commanderImage}
                             rounded
@@ -158,18 +195,28 @@ const EditDeck = () => {
                     </Col>
 
                     {/* Card search and card list */}
-                    <Col className="col-md-8">
+                    <Col className="col-md-8 col-12">
                         {/* search */}
                         <InputGroup className="mb-3">
-                            <FormControl
+                            <AsyncTypeahead
+                                id="search-autocomplete"
+                                isLoading={searchLoading}
+                                ref={searchcardInput}
+                                onSearch={searchSearch}
+                                options={optionsSearch}
+                                selected={searchCard}
+                                onChange={setSearchCard}
                                 placeholder="Find and add cards to deck..."
-                                aria-label="Find card"
-                                aria-describedby="basic-addon2"
+                                clearButton
+                                className="form-control border-0 p-0"
                             />
-                            <Button id="button-addon2">
+                            <Button id="button-addon2" onClick={() => addCard()}>
                                 <span>Add</span> <Plus className="mb-1" />
                             </Button>
                         </InputGroup>
+
+                        {/* cards list */}
+                        {deckCards && <CardGrid cards={deckCards}/>}
                     </Col>
                 </Row>
             </Container>
