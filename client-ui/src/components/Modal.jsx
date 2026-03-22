@@ -11,6 +11,7 @@ const BootstrapModal = ({ id, showModal=true, setShowModal, size="sm", title="",
                 onHide={() => setShowModal(false)}
                 aria-labelledby={id}
                 contentClassName='rounded-4'
+                centered
             >
                 {title && (
                     <Modal.Header closeButton className={`text-center ${additionalClass}`} >

@@ -7,9 +7,10 @@ import {
     Form,
     Image,
     InputGroup,
-    Row
+    Modal,
+    Row,
 } from "react-bootstrap";
-import { Plus } from "react-bootstrap-icons";
+import { Plus, TrashFill } from "react-bootstrap-icons";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import { useNavigate, useParams } from "react-router-dom";
 import CardGrid from "../components/CardGrid";
@@ -40,6 +41,8 @@ const EditDeck = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
     const { deckId } = useParams();
+
+    const [selectedCard, setSelectedCard] = useState(false);
 
     useEffect(() => {
         loadDeck();
@@ -112,10 +115,10 @@ const EditDeck = () => {
         const formData = { card_name };
         try {
             const response = await api.put(`/decks/${id}/add-card`, formData);
-            console.log(response.data.data);
+            console.log(response);
             addOrUpdateCardInList(response.data.data);
         } catch (error) {
-            console.log(error.response.data.message);
+            console.log(error.response);
             setAddCardError(error.response.data.message);
         }
         clearSearch();
@@ -124,22 +127,19 @@ const EditDeck = () => {
 
     const addOrUpdateCardInList = (newCard) => {
         // Check if the item already exists by finding its index
-        const existingItemIndex = deckCards.findIndex(
+        const existingItemIndex = deckCards[newCard.type].items.findIndex(
             (card) => card.id === newCard.id,
         );
 
         if (existingItemIndex !== -1) {
-            // If the item exists, create a new array with the updated item
-            const updatedCards = [...deckCards]; // Create a shallow copy of the array
-            updatedCards[existingItemIndex] = {
-                ...updatedCards[existingItemIndex],
-                ...newCard,
-            }; // Update the item with new data
-            setDeckCards(updatedCards);
+            // if the item exists
+            deckCards[newCard.type].items[existingItemIndex] = newCard; // Update the item with new data
         } else {
             // If the item does not exist, add it to the end of a new array
-            setDeckCards((prevDeckCards) => [...prevDeckCards, newCard]); // Use functional state update
+            deckCards[newCard.type].items.push(newCard);
         }
+
+        deckCards[newCard.type].count += 1;
     };
 
     return (
@@ -156,6 +156,7 @@ const EditDeck = () => {
                             width={250}
                             fluid
                             className="d-block mx-auto"
+                            onClick={() => setSelectedCard()}
                         />
                         <Form onSubmit={editDeck}>
                             <input type="hidden" name="id" value={id} />
@@ -223,7 +224,7 @@ const EditDeck = () => {
                     {/* Card search and card list */}
                     <Col className="col-md-9 col-12">
                         {/* search */}
-                        {(addCardError !== false) && (
+                        {addCardError !== false && (
                             <BootstrapModal
                                 title="Error"
                                 id="errorModal"
@@ -256,7 +257,35 @@ const EditDeck = () => {
                         </InputGroup>
 
                         {/* cards list */}
-                        {deckCards && <CardGrid cards={deckCards} />}
+                        {deckCards && (
+                            <CardGrid
+                                cards={deckCards}
+                                onClick={setSelectedCard}
+                            />
+                        )}
+
+                        {/* selected card modal */}
+                        {selectedCard && (
+                            <BootstrapModal
+                                title={selectedCard.name}
+                                id="selectedCardModal"
+                                showModal={selectedCard !== false}
+                                setShowModal={setSelectedCard}
+                                size="lg"
+                            >
+                                <Image
+                                    src={selectedCard.image_url}
+                                    rounded
+                                    fluid
+                                    alt={selectedCard.name}
+                                />
+                                <Modal.Footer>
+                                    <Button fluid className="w-100 rounded m-0">
+                                       <TrashFill /> Remove
+                                    </Button>
+                                </Modal.Footer>
+                            </BootstrapModal>
+                        )}
                     </Col>
                 </Row>
             </Container>

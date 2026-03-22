@@ -71,6 +71,7 @@ class DeckController extends Controller implements DeckControllerDocs
             $deck['cards'] = $result->cards()->withPivot('quantity', 'image_url', 'extra_image', 'printed_name')->get()->map(function($card){
                return CardService::setCustomDetails($card);
             });
+            $deck['cards'] = CardService::groupCardsByType($deck['cards']->toArray());
 
             return ApiResponse::success($deck);
         } else
