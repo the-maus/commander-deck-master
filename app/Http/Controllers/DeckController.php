@@ -121,4 +121,9 @@ class DeckController extends Controller implements DeckControllerDocs
         else
             return ApiResponse::error($result);
     }
+
+    public function removeCard(string $id, string $cardId)
+    {
+        
+    }
 }

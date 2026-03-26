@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Docs\CardControllerDocs;
 use App\Services\ApiResponse;
+use App\Services\CardService;
 use App\Services\ScryfallService;
 use Illuminate\Http\Request;
 
 
 class CardController extends Controller implements CardControllerDocs
 {
-    public function __construct(protected ScryfallService $scryfall) {}
+    public function __construct(
+        protected ScryfallService $scryfall, 
+        protected CardService $cardService
+    ) {}
 
     
     public function search(Request $req)
@@ -41,4 +45,8 @@ class CardController extends Controller implements CardControllerDocs
         return ApiResponse::success($response);
     }
 
+    public function cacheData()
+    {
+        $this->cardService->cacheData();
+    }
 }

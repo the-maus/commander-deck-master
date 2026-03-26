@@ -9,6 +9,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/cards/search', [CardController::class, 'search'])->name('cards_search');
     Route::get('/cards/autocomplete', [CardController::class, 'autoComplete'])->name('cards_autocomplete');
     Route::get('/cards/prints', [CardController::class, 'getCardPrints'])->name('cards_prints');
+    Route::get('/cards/cache-data', [CardController::class, 'cacheData'])->name('cards_cache');
     
     // Decks
     Route::get('/decks', [DeckController::class, 'index'])->name('decks_index');

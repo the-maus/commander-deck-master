@@ -46,6 +46,11 @@ class ScryfallService
         return CardService::parseCardData($this->makeRequest(compact('fuzzy'), '/cards/named', false));
     }
 
+    public function bulkData()
+    {
+        return $this->makeRequest([], '/bulk-data/all-cards', false);
+    }
+
     private function makeRequest($parameters = [], $endpoint = '/cards/search', $getData = true)
     {
         // avoid "HTTP 429 Too Many Requests"

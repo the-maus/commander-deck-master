@@ -46,6 +46,7 @@ const EditDeck = () => {
 
     useEffect(() => {
         loadDeck();
+        window.scrollTo(0, 0);
     }, []);
 
     async function loadDeck() {
@@ -124,6 +125,13 @@ const EditDeck = () => {
         clearSearch();
         setLoading(false);
     };
+
+    const removeCard = async () => {
+        setLoading(true);
+
+
+        setLoading(false);
+    }
 
     const addOrUpdateCardInList = (newCard) => {
         // Check if the item already exists by finding its index

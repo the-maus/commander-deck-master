@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Card;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class CardService
@@ -49,6 +50,8 @@ class CardService
             'items' => []
         ]
     ];
+
+    public function __construct(protected ScryfallService $scryfall) {}
 
     public function getOrCreateCard($cardData)
     {
@@ -125,4 +128,29 @@ class CardService
 
         return self::$types;
     } 
+
+
+    public function cacheData()
+    {
+        try {
+            Log::info('Getting download link...');
+            $result = $this->scryfall->bulkData();
+            $downloadLink = $result['download_uri'] ?? '';
+            if (!$downloadLink) {
+                Log::error('Could not get bulk data download link');
+                return;
+            }
+
+            Log::info('Downloading cards data file...');
+            $destinationPath = storage_path('app/cards_data.json'); 
+            Http::timeout(600)->sink($destinationPath)->get($downloadLink);
+
+            // save data
+            Log::info('Saving cards to database...');
+
+        } catch (\Exception $e) {
+            Log::error("Error while caching card data" . $e->getMessage());
+            return null;
+        }
+    }
 }
